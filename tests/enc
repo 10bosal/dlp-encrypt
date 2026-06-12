@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+TESTS_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+INPUT="${1:-$TESTS_DIR/answers.docx}"
+OUTPUT="${INPUT%.*}_enc.${INPUT##*.}"
+
+ROOT="$(cd "$TESTS_DIR/.." && pwd)"
+
+exec "$ROOT/.venv/bin/dlp-encrypt" \
+  "$INPUT" \
+  -o "$OUTPUT" \
+  --key-hex "$(cat "$TESTS_DIR/KEY-HEX")" \
+  --mime-type application/vnd.openxmlformats-officedocument.wordprocessingml.document \
+  --print-b64
